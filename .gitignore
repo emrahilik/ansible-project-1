@@ -1,0 +1,5 @@
+# ignore Inventory Files 
+
+
+*-inventory.yaml
+*-inventory.*

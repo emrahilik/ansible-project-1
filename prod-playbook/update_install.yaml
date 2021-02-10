@@ -1,0 +1,23 @@
+- name: install ans update # name of the playbook #
+  hosts: prod
+  gather_facts: yes
+  tasks: # name of the tasks > you have to describe what do you want to do #
+    - name: Install vim, wget, git and curl packages on CentOS
+      when: ansible_facts['distribution'] == "CentOS"
+      yum: 
+        name: 
+          - vim
+          - git
+          - wget
+          - curl
+      state: latest 
+
+    - name: Install vim, wget, git and curl packages on Ubuntu
+      when: ansible_facts['distribution'] == "Ubuntu"
+      apt: 
+        name: 
+          - vim
+          - git
+          - wget
+          - curl
+      state: latest 

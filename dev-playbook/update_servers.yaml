@@ -1,0 +1,20 @@
+--- 
+  - name: Update packages in remote servers
+    hosts:  dev
+    gather_facts: yes
+    tasks: 
+      - name: Update CentOS
+        ping: 
+        when: 
+          - ansible_facts['distribution'] == "CentOS"
+        yum: 
+          name: '*'
+          state: latest
+      
+      - name: Update Ubuntu
+        ping: 
+        when: 
+          - ansible_facts['distribution'] == "Ubuntu"
+        apt: 
+          name: '*'
+          state: latest
