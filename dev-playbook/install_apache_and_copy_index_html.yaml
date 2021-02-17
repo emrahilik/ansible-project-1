@@ -1,0 +1,70 @@
+---
+  - name: Install Apache on all servers
+    hosts: dev
+    gather_facts: yes
+    tasks:
+      - name: Install Apache on CentOS
+        when: 
+        - ansible_facts['distribution'] == "CentOS"
+        yum: 
+          name: 
+          - httpd
+          state: latest
+      
+      - name: Copy index.html
+        when:
+        - ansible_facts['distribution'] == "CentOS"
+        copy: 
+          dest: /var/www/html/
+          src:  index.html
+        register: copy_result
+
+      - name: Start Apache on CentOS
+        when: 
+        - ansible_facts['distribution'] == "CentOS"
+       # - copy_result is changed 
+        - copy_result is success 
+        systemd: 
+          name: httpd 
+          state: restarted 
+          enabled: yes
+         
+          
+      
+
+
+
+
+
+
+
+#      - name: Start Apache on CentOS
+#        when: 
+#        - ansible_facts['distribution'] == "CentOS"
+#        - ansible_facts['distribution_major_version'] == "7"
+#        - apache_installed_centos is success 
+#        systemd:    # apache and httpd controled systemctl. We have to use systemd module in the  ansible documentation
+#          name: httpd 
+#          state: started 
+#          enabled: yes
+#         
+#      - name: Install Apache on Ubuntu
+#        when: 
+#        - ansible_facts['distribution'] == "Ubuntu"
+#        apt:
+#          name:
+#          - apache2    #  we have to type here apache2 for intallation not httpd. because it is diffirent.
+#          state: latest
+#        register: apache_installed_ubuntu
+#
+#
+#
+#      - name: Start Apache on Ubuntu
+#        when: 
+#        - ansible_facts['distribution'] == "Ubuntu"
+#        - apache_installed_ubuntu is success 
+#        systemd:    # apache and httpd controled systemctl. We have to use systemd module in the  ansible documentation
+#          name: apache2.service  #this is important
+#          state: started 
+#          enabled: yes  
+#         

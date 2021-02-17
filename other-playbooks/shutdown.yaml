@@ -1,0 +1,10 @@
+---
+  - name: Shut Down Linux Servers
+    hosts: all
+    gather_facts: no
+    tasks:
+      - name: Shut Down
+        shell:
+          cmd: sleep 2 && /sbin/shutdown -c && /sbin/shutdown -h now
+        async: 1
+        poll: 0
