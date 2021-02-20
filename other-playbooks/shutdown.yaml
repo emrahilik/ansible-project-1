@@ -1,10 +1,30 @@
 ---
   - name: Shut Down Linux Servers
     hosts: all
+    vars:
+      list_of_hosts: "{{ ansible_host }}"
     gather_facts: no
     tasks:
       - name: Shut Down
+        ignore_unreachable: yes
         shell:
           cmd: sleep 2 && /sbin/shutdown -c && /sbin/shutdown -h now
         async: 1
         poll: 0
+        register: shut_down_result
+
+      - name: Run Ping
+        ignore_errors: yes
+        shell:
+          cmd: ping {{list_of_hosts }} -c 5  # 5 times it will ping  to server
+        delegate_to: localhost
+        register: result   # if you want to get response  you have to use debug as below 
+# if you want to get error and read is easly you can you this way 
+      - name: Read Ping Response 
+        debug: 
+          var: result  
+
+      - name: Write Error Code to a file   ## if you want to send the error specific file 
+        shell:                    # you can use shell and >>  file name
+           cmd: echo {{ result }} >> /tmp/error.json
+        delegate_to: localhost  
