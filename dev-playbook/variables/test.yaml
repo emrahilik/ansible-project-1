@@ -1,0 +1,5 @@
+test_message: "hello from Yusuf "
+hosts: "all"
+facts: no
+playbook_name: "testing variable file"
+custom_command: "pwd"
