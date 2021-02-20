@@ -1,0 +1,36 @@
+---
+  - name: Install wget, curl, vim ,tree,git on all servers
+    hosts: prod
+    vars: 
+      custom: pwd
+      packages:
+        - vim
+        - curl
+        - wget
+        - tree
+        - git     
+    gather_facts: yes
+    tasks:
+      - name: Install packages on CentOS # when we install "htop" we have to define and make epel-release. 
+        when: ansible_facts['distribution'] == "CentOS" # that is why our fist task is epel-release
+        yum: 
+          name: "{{ packages }}"
+          state: latest
+          
+      - name: Install packages 
+        when: 
+          - ansible_facts['distribution'] == "CentOS"
+        yum:
+          name: "{{ packages }}" 
+          state: latest
+
+      - name: Install packages on Ubuntu
+        when: 
+          - ansible_facts['distribution'] == "Ubuntu"
+        apt:
+          name: "{{ packages }}"     
+          state: latest
+      
+      - name: Run a task 
+        shell:
+          cmd: "{{ custom }}"

@@ -1,20 +1,28 @@
 --- 
   - name: Update packages in remote servers
     hosts:  dev
+    var:
+      package: curl
     gather_facts: yes
     tasks: 
       - name: Update CentOS
-        ping: 
         when: 
           - ansible_facts['distribution'] == "CentOS"
         yum: 
           name: '*'
           state: latest
       
-      - name: Update Ubuntu
-        ping: 
+      - name: install curl on Ubuntu
         when: 
           - ansible_facts['distribution'] == "Ubuntu"
         apt: 
-          name: '*'
+          name: "{{ package }}"
+          state: latest
+        
+
+      - name: install curl on CentOS
+        when:  
+           - ansible_facts['distribution'] == "CentOS"
+        yum:
+          name: "{{ package }}"
           state: latest
