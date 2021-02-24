@@ -1,36 +1,30 @@
 ---
-  - name: Install wget, curl, vim ,tree,git on all servers
-    hosts: prod
-    vars: 
-      custom: pwd
-      packages:
-        - vim
-        - curl
-        - wget
-        - tree
-        - git     
-    gather_facts: yes
+  - name: "{{ play_name }}"
+    hosts: "{{ servers }}"
+    vars:
+      facts: no
+    vars_files:
+       - "install_packages_play-vars.yaml"   #steps is important. variable file consider last file as priority 
+       - "install_packages_tasks-vars.yaml"    # do not give different value as a one key
+    gather_facts: "{{ facts }}"
     tasks:
       - name: Install packages on CentOS # when we install "htop" we have to define and make epel-release. 
         when: ansible_facts['distribution'] == "CentOS" # that is why our fist task is epel-release
         yum: 
-          name: "{{ packages }}"
+          name: "{{ centos_packages }}"
           state: latest
           
       - name: Install packages 
         when: 
           - ansible_facts['distribution'] == "CentOS"
         yum:
-          name: "{{ packages }}" 
+          name: "{{ centos_packages }}" 
           state: latest
 
       - name: Install packages on Ubuntu
         when: 
           - ansible_facts['distribution'] == "Ubuntu"
         apt:
-          name: "{{ packages }}"     
+          name: "{{ ubuntu_packages }}"     
           state: latest
       
-      - name: Run a task 
-        shell:
-          cmd: "{{ custom }}"

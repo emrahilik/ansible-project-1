@@ -1,0 +1,13 @@
+# to add on Ubuntu change this section 
+ubuntu_packages: 
+  - vim
+  - tree
+  - wget 
+  - curl 
+
+# to add on centos change this section 
+
+centos_packages: 
+  - vim
+  - git 
+  - wget 

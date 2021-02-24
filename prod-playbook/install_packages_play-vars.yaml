@@ -1,0 +1,3 @@
+play_name: "install packages playbook"
+servers: "prod"
+facts: yes

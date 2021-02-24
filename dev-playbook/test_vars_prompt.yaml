@@ -1,0 +1,20 @@
+---
+  - name: Ping Hosts
+    hosts: all
+    vars_prompt:  
+      - name: "facts"
+        prompt: " Give me message?"
+        private: no
+    gather_facts: no
+    vars: 
+      facts: "yes"
+    tasks:
+      - name: Ping Hosts
+        ping:
+      
+      - name: Print Variable
+        debug:
+          msg: "{{facts}}"
+
+    
+# ansible-playbook -i dev-inventory.yaml dev-playbook/test_vars_prompt.yaml --extra-vars "facts=no"
